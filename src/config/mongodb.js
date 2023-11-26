@@ -4,7 +4,7 @@ import { env } from "./environment";
 
 const MONGODB_URI = env.MONGODB_URI;
 
-const DATABASE_NAME = env.DATABASE_NAME;
+const DATABASE_NAME = env.DATABASENAME;
 
 import { MongoClient, ServerApiVersion } from "mongodb";
 let trelloDatabaseInstance = null;
