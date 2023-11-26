@@ -1,8 +1,10 @@
 //4CzA7PAmoowRXk19
 //huanle120201
-const MONGODB_URI =
-  "mongodb+srv://huanle120201:4CzA7PAmoowRXk19@trello-api.jmckoii.mongodb.net/?retryWrites=true&w=majority";
-const DATABASE_NAME = "trello-api";
+import { env } from "./environment";
+
+const MONGODB_URI = env.MONGODB_URI;
+
+const DATABASE_NAME = env.DATABASE_NAME;
 
 import { MongoClient, ServerApiVersion } from "mongodb";
 let trelloDatabaseInstance = null;
