@@ -86,12 +86,30 @@ const getDetails = async (id) => {
     throw new Error(error);
   }
 };
+//push gia tri columnId cuoi mang columnOrderIds
+const pushColumnOrderIds = async (column) => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOneAndUpdate(
+        { _id: new ObjectId(column.boardId) },
+        { $push: { columnOrderIds: new ObjectId(column._id) } },
+        //tra ve column moi sau khi cap nhat new k mac dinh se tra ve board chua update
+        { returnDocument: "after" }
+      );
+    //ham findOneandupdate tra ve ban ghi thong qua result nhung phai .value
+    return result.value ;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 export const boardModel = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
   createNew,
   findOneById,
   getDetails,
+  pushColumnOrderIds
 };
 // import Joi from "joi";
 // const BOARD_COLLECTION_NAME = "boards";

@@ -30,9 +30,15 @@ const validateBeforeCreate = async (data) => {
 const createNew = async (data) => {
   try {
     const validData = await validateBeforeCreate(data);
+    const newCardToAdd = {
+      ...validData,
+      columnId: new ObjectId(validData.columnId),
+      boardId: new ObjectId(validData.boardId),
+    };
+
     const createdCard = await GET_DB()
       .collection(CARD_COLLECTION_NAME)
-      .insertOne(validData);
+      .insertOne(newCardToAdd);
     return createdCard;
   } catch (error) {
     throw new Error(error);
