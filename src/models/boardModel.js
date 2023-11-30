@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { GET_DB } from "~/config/mongodb";
-import { ObjectId, objectId } from "mongodb";
+import { ObjectId } from "mongodb";
 
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators";
 import { BOARD_TYPES } from "~/utils/constants";
@@ -81,7 +81,7 @@ const getDetails = async (id) => {
       ])
       .toArray();
 
-    return result[0] || {};
+    return result[0] || null;
   } catch (error) {
     throw new Error(error);
   }
