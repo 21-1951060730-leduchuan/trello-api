@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable no-console */
 
 import { columnModel } from "~/models/columnModel";
@@ -15,14 +16,23 @@ const createNew = async (reqBody) => {
     if (getNewColumn) {
       getNewColumn.cards = [];
       //cap nhat columnOderIds
-      await boardModel.pushColumnOrderIds(getNewColumn)
+      await boardModel.pushColumnOrderIds(getNewColumn);
     }
     return getNewColumn;
   } catch (error) {
     throw error;
   }
 };
-
+const update = async (columnId, reqBody) => {
+  try {
+    const updateData = { ...reqBody, updatedAt: Date.now() };
+    const updatedColumn = await columnModel.update(columnId, updateData);
+    return updatedColumn;
+  } catch (error) {
+    throw error;
+  }
+};
 export const columnService = {
   createNew,
+  update,
 };

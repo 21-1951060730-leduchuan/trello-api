@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable no-console */
 import { slugify } from "~/utils/formatters";
 import { boardModel } from "~/models/boardModel";
@@ -46,7 +47,17 @@ const getDetails = async (reqParamsId) => {
     throw error;
   }
 };
+const update = async (reqParamsId, reqBody) => {
+  try {
+    const updateData = { ...reqBody, updatedAt: Date.now() };
+    const updatedBoard = await boardModel.update(reqParamsId, updateData);
+    return updatedBoard;
+  } catch (error) {
+    throw error;
+  }
+};
 export const boardService = {
   createNew,
   getDetails,
+  update,
 };

@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 
 // Define Collection (name & schema)
 const COLUMN_COLLECTION_NAME = "columns";
+
 const COLUMN_COLLECTION_SCHEMA = Joi.object({
   boardId: Joi.string()
     .required()
@@ -26,10 +27,15 @@ const validateBeforeCreate = async (data) => {
     abortEarly: false,
   });
 };
+const INVALID_UPDATE_FIELDS = ["_id", "boardId", "createdAt"];
+
 const createNew = async (data) => {
   try {
     const validData = await validateBeforeCreate(data);
-    const newColumnToAdd = { ...validData, boardId: new ObjectId(validData.boardId) };
+    const newColumnToAdd = {
+      ...validData,
+      boardId: new ObjectId(validData.boardId),
+    };
     const createdColumn = await GET_DB()
       .collection(COLUMN_COLLECTION_NAME)
       .insertOne(newColumnToAdd);
@@ -60,7 +66,29 @@ const pushCardOrderIds = async (card) => {
         { returnDocument: "after" }
       );
     //ham findOneandupdate tra ve ban ghi thong qua result nhung phai .value
-    return result.value 
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const update = async (reqParamsId, updateData) => {
+  try {
+    //loc field k cho cap nhat linh tinh
+    Object.keys(updateData).forEach((fieldName) => {
+      if (INVALID_UPDATE_FIELDS.includes(fieldName)) {
+        delete updateData[fieldName];
+      }
+    });
+    const result = await GET_DB()
+      .collection(COLUMN_COLLECTION_NAME)
+      .findOneAndUpdate(
+        { _id: new ObjectId(reqParamsId) },
+        { $set: updateData },
+
+        { returnDocument: "after" }
+      );
+
+    return result;
   } catch (error) {
     throw new Error(error);
   }
@@ -71,5 +99,6 @@ export const columnModel = {
   createNew,
   findOneById,
   validateBeforeCreate,
-  pushCardOrderIds
+  pushCardOrderIds,
+  update,
 };

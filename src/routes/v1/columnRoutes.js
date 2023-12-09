@@ -10,5 +10,6 @@ Router.route("/")
   })
   .post(columnValidation.createNew, columnController.createNew);
 // Router.route("/:id").get(columnController.getDetails).put();
+Router.route("/:id").put(columnValidation.update, columnController.update);
 
 export const columnRoutes = Router;
