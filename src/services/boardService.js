@@ -58,6 +58,7 @@ const update = async (reqParamsId, reqBody) => {
     throw error;
   }
 };
+
 const moveCardToDifferentColumn = async (reqBody) => {
   try {
     //b1

@@ -2,7 +2,10 @@
 /* eslint-disable no-console */
 
 import { columnModel } from "~/models/columnModel";
+import { cardModel } from "~/models/cardModel";
 import { boardModel } from "~/models/boardModel";
+import ApiError from "~/utils/ApiError";
+import { StatusCodes } from "http-status-codes";
 const createNew = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
   try {
@@ -32,7 +35,22 @@ const update = async (columnId, reqBody) => {
     throw error;
   }
 };
+const deleteItem = async (reqParamsId) => {
+  try {
+    const targetColumn = await columnModel.findOneById(reqParamsId);
+    if (!targetColumn) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Column not found");
+    }
+    await columnModel.deleteOneById(reqParamsId);
+    await cardModel.deleteManyByColumnId(reqParamsId);
+    await boardModel.pullColumnOrderIds(targetColumn);
+    return { deleteResult: "Column deleted successfully" };
+  } catch (error) {
+    throw error;
+  }
+};
 export const columnService = {
   createNew,
   update,
+  deleteItem,
 };

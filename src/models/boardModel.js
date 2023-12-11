@@ -103,6 +103,23 @@ const pushColumnOrderIds = async (column) => {
     throw new Error(error);
   }
 };
+// lay phan tu columnId ra khoi columnOrderIds
+// dung pull cua mongoDB de lay ra 1 phan tu roi xoa no di
+const pullColumnOrderIds = async (column) => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOneAndUpdate(
+        { _id: new ObjectId(column.boardId) },
+        { $pull: { columnOrderIds: new ObjectId(column._id) } },
+        //tra ve column moi sau khi cap nhat new k mac dinh se tra ve board chua update
+        { returnDocument: "after" }
+      );
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const update = async (reqParamsId, updateData) => {
   try {
     //loc field k cho cap nhat linh tinh
@@ -138,6 +155,7 @@ export const boardModel = {
   getDetails,
   update,
   pushColumnOrderIds,
+  pullColumnOrderIds
 };
 // import Joi from "joi";
 // const BOARD_COLLECTION_NAME = "boards";

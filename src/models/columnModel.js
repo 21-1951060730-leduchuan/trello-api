@@ -97,6 +97,16 @@ const update = async (reqParamsId, updateData) => {
     throw new Error(error);
   }
 };
+const deleteOneById = async (reqParamsId) => {
+  try {
+    const result = await GET_DB()
+      .collection(COLUMN_COLLECTION_NAME)
+      .deleteOne({ _id: new ObjectId(reqParamsId) });
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 export const columnModel = {
   COLUMN_COLLECTION_NAME,
   COLUMN_COLLECTION_SCHEMA,
@@ -105,4 +115,5 @@ export const columnModel = {
   validateBeforeCreate,
   pushCardOrderIds,
   update,
+  deleteOneById
 };

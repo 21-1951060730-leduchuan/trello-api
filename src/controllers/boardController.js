@@ -19,6 +19,7 @@ const getDetails = async (req, res, next) => {
     next(error);
   }
 };
+
 const update = async (req, res, next) => {
   try {
     const updatedBoard = await boardService.update(req.params.id, req.body);
@@ -41,5 +42,6 @@ export const boardController = {
   createNew,
   getDetails,
   update,
-  moveCardToDifferentColumn
+
+  moveCardToDifferentColumn,
 };
